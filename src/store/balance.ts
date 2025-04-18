@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Chain } from '../api/balance';
 
 // 保存网络的完整信息而不仅仅是key
 export interface NetworkInfo {

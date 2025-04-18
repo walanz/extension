@@ -30,12 +30,12 @@ function App() {
         <div className="flex justify-between items-center mb-4">
           <h1 className="text-2xl font-bold text-indigo-600">Walanz</h1>
           <div className="flex gap-2">
-            <button
+            {/* <button
               onClick={() => setShowHistory(true)}
               className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
             >
               历史记录
-            </button>
+            </button> */}
             <button
               onClick={toggleBatchMode}
               className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"

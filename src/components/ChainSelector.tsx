@@ -152,6 +152,9 @@ export const ChainSelector: React.FC = () => {
             {selectedCount}/{MAX_SELECTED_CHAINS}
           </div>
           <button
+            style={{
+              display: 'none'
+            }}
             onClick={() => {
               console.log('Debug state:', {
                 selectedChains,

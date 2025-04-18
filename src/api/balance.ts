@@ -93,7 +93,6 @@ export const fetchBalances = async (
     }
     
     const timestamp = new Date(response.data.timestamp || Date.now()).getTime();
-    const ethPrice = response.data.ethPrice || { usd: 0, cny: 0 };
     
     // 将数据转换为BalanceResponse[]格式
     const balances: BalanceResponse[] = [];

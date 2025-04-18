@@ -195,10 +195,10 @@ export const BatchBalanceList: React.FC = () => {
           <thead>
             <tr className="bg-gray-50">
               <th className="px-3 py-2 border text-left text-xs font-medium text-gray-500">网络</th>
-              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">地址数</th>
-              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">ETH余额</th>
-              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">美元价值</th>
-              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">人民币价值</th>
+              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">总数</th>
+              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">ETH</th>
+              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">USD</th>
+              <th className="px-3 py-2 border text-right text-xs font-medium text-gray-500">CNY</th>
             </tr>
           </thead>
           <tbody>
