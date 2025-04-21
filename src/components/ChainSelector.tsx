@@ -18,7 +18,7 @@ export const ChainSelector: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 获取所有链
-  const { data: chains = [] } = useQuery<Chain[]>({
+  const { data: chains = [], isLoading: isChainsLoading } = useQuery<Chain[]>({
     queryKey: ['chains', searchTerm],
     queryFn: () => getChains(searchTerm),
     staleTime: 1000 * 60 * 5, // 5分钟缓存
@@ -218,7 +218,7 @@ export const ChainSelector: React.FC = () => {
               </button>
             </div>
             
-            <div className="mb-3">
+            <div className="mb-3 relative">
               <input
                 type="text"
                 value={searchTerm}
@@ -226,6 +226,15 @@ export const ChainSelector: React.FC = () => {
                 placeholder="搜索网络..."
                 className="w-full px-3 py-1.5 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
+              {/* 搜索时的加载指示器 */}
+              {isChainsLoading && (
+                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <svg className="animate-spin h-4 w-4 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                </div>
+              )}
             </div>
             
             <div className="flex justify-between items-center mb-2">
@@ -242,64 +251,102 @@ export const ChainSelector: React.FC = () => {
             </div>
             
             <div className="overflow-y-auto flex-1 pr-1">
-              {/* 主网 */}
-              {chains.filter(chain => chain.key === 'mainnet').length > 0 && (
-                <div className="mb-3">
-                  <div className="text-xs text-gray-500 mb-1">主网</div>
-                  <div className="space-y-1">
-                    {chains.filter(chain => chain.key === 'mainnet').map((chain) => (
-                      <ChainButton 
-                        key={chain.key}
-                        chain={chain}
-                        selected={selectedChains.includes(chain.key)}
-                        onToggle={() => handleToggleNetwork(chain)}
-                        disabled={!canSelectMore && !selectedChains.includes(chain.key)}
-                      />
-                    ))}
+              {isChainsLoading && searchTerm && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="flex flex-col items-center">
+                    <svg className="animate-spin h-8 w-8 text-indigo-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span className="text-sm text-gray-600">正在搜索网络...</span>
                   </div>
                 </div>
               )}
 
-              {/* 二层网络 */}
-              {chains.filter(chain => ['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)).length > 0 && (
-                <div className="mb-3">
-                  <div className="text-xs text-gray-500 mb-1">二层网络</div>
-                  <div className="space-y-1">
-                    {chains.filter(chain => ['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)).map((chain) => (
-                      <ChainButton 
-                        key={chain.key}
-                        chain={chain}
-                        selected={selectedChains.includes(chain.key)}
-                        onToggle={() => handleToggleNetwork(chain)}
-                        disabled={!canSelectMore && !selectedChains.includes(chain.key)}
-                      />
-                    ))}
+              {!isChainsLoading && searchTerm && chains.length === 0 && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="flex flex-col items-center">
+                    <svg className="h-8 w-8 text-gray-400 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span className="text-sm text-gray-600">未找到匹配的网络</span>
                   </div>
                 </div>
               )}
 
-              {/* 其他网络 */}
-              {chains.filter(chain => 
-                chain.key !== 'mainnet' && 
-                !['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)
-              ).length > 0 && (
-                <div>
-                  <div className="text-xs text-gray-500 mb-1">其他网络</div>
-                  <div className="space-y-1">
-                    {chains.filter(chain => 
-                      chain.key !== 'mainnet' && 
-                      !['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)
-                    ).map((chain) => (
-                      <ChainButton 
-                        key={chain.key}
-                        chain={chain}
-                        selected={selectedChains.includes(chain.key)}
-                        onToggle={() => handleToggleNetwork(chain)}
-                        disabled={!canSelectMore && !selectedChains.includes(chain.key)}
-                      />
-                    ))}
+              {!isChainsLoading && !searchTerm && chains.length === 0 && (
+                <div className="flex items-center justify-center py-8">
+                  <div className="flex flex-col items-center">
+                    <svg className="h-8 w-8 text-gray-400 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    <span className="text-sm text-gray-600">无可用网络</span>
                   </div>
                 </div>
+              )}
+
+              {!isChainsLoading && (
+                <>
+                  {/* 主网 */}
+                  {chains.filter(chain => chain.key === 'mainnet').length > 0 && (
+                    <div className="mb-3">
+                      <div className="text-xs text-gray-500 mb-1">主网</div>
+                      <div className="space-y-1">
+                        {chains.filter(chain => chain.key === 'mainnet').map((chain) => (
+                          <ChainButton 
+                            key={chain.key}
+                            chain={chain}
+                            selected={selectedChains.includes(chain.key)}
+                            onToggle={() => handleToggleNetwork(chain)}
+                            disabled={!canSelectMore && !selectedChains.includes(chain.key)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 二层网络 */}
+                  {chains.filter(chain => ['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)).length > 0 && (
+                    <div className="mb-3">
+                      <div className="text-xs text-gray-500 mb-1">二层网络</div>
+                      <div className="space-y-1">
+                        {chains.filter(chain => ['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)).map((chain) => (
+                          <ChainButton 
+                            key={chain.key}
+                            chain={chain}
+                            selected={selectedChains.includes(chain.key)}
+                            onToggle={() => handleToggleNetwork(chain)}
+                            disabled={!canSelectMore && !selectedChains.includes(chain.key)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 其他网络 */}
+                  {chains.filter(chain => 
+                    chain.key !== 'mainnet' && 
+                    !['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)
+                  ).length > 0 && (
+                    <div>
+                      <div className="text-xs text-gray-500 mb-1">其他网络</div>
+                      <div className="space-y-1">
+                        {chains.filter(chain => 
+                          chain.key !== 'mainnet' && 
+                          !['optimism', 'arbitrum', 'polygon', 'base'].includes(chain.key)
+                        ).map((chain) => (
+                          <ChainButton 
+                            key={chain.key}
+                            chain={chain}
+                            selected={selectedChains.includes(chain.key)}
+                            onToggle={() => handleToggleNetwork(chain)}
+                            disabled={!canSelectMore && !selectedChains.includes(chain.key)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
             

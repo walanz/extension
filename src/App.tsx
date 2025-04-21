@@ -64,7 +64,7 @@ function App() {
         {showHistory && <HistoryList onClose={() => setShowHistory(false)} />}
         
         <footer className="mt-8 pt-4 border-t text-xs text-center text-gray-400">
-          <p className='flex justify-center'>© 2025 Walanz <img className='ml-1' src="./public/icons/icon-16.png" alt="icon" /></p>
+          <p className='flex justify-center'>© 2025 Walanz <img className='ml-1' src="./icons/icon-16.png" alt="icon" /></p>
         </footer>
       </div>
     </QueryClientProvider>
