@@ -15,6 +15,8 @@
   <a href="#license">License</a>
 </div>
 
+<img src="./public/1400x560.png" width="100%" alt="Walanz Banner">
+
 ---
 
 ## Features

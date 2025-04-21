@@ -15,6 +15,8 @@
   <a href="#许可证">许可证</a>
 </div>
 
+<img src="./public/1400x560.png" width="100%" alt="Walanz Banner">
+
 ---
 
 ## 功能特性
